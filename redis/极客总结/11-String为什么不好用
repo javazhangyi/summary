@@ -1,0 +1,63 @@
+11-String为什么不好用
+  当你保存64位有符号，String 保存为8个组合的Long 类型（int编码）
+  当时有字符串，则使用动态字符串
+  String 结构体：
+    len：4字节：已用长度
+    alloc：4字节，buf的长度
+    buf：字节数组，实际保存的数据
+  String 额外开销
+    通过redisObjec结构体记录元数据，同时指向实际的数据
+  redisObject 结构体
+    8字节的元数据
+    8字节的指针---->SDS
+
+  String 优化
+    当为Long ->int 编码
+    当小于44字节->embStr 编码（redisObject 和 SDB 是连续的，避免内存碎片）
+    大于44字节，->raw 编码（将redisObject 和 SDB 分开放）
+  其他占用值
+    全局的dictEntry
+      8字节的key
+      8字节的value
+      8字节下一个dictEntry
+  jemalloc 分配规则
+    2的次幂
+
+  String 64字节分配:利用率25%
+    dict-entry：32
+      key：8
+      value：8
+      next-entry：8
+      空闲：8
+    key-redisObject：16
+      元数据类型：8
+      int：8
+    value-redisObject：16
+      元数据类型：8
+      int：8
+  压缩列表： 大约是50%
+    头部：
+      zl-bytes：分配的长度
+      zl-tail：尾部指针
+      zl-len：entry的个数
+    entry：
+      prev-len：1字节或者5字节，前一个长度
+      length：4字节，自己长度
+      encoding：编码1字节
+      content：保存的实际数据
+    尾部：
+      zl-end：结尾标识符
+
+  用集合保存key-vale：二级编码，把前一个key拆分为两部分 7位 和 3位，放在 hash 的key，以及key-value
+
+  hash 阈值：当超过压缩列表最大的元素个数，或者以及每一个保存的长度就会把压缩列表转化为hash 表，效率就会降低
+    hash-max-zip-list-entries：压缩列表保存的最大结合元素
+    hash-max-zip-list-value：单个元素的最大长度
+
+长度计算
+http://www.redis.cn/redis_memory/
+
+
+
+
+

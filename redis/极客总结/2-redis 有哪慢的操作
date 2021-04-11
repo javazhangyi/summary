@@ -1,0 +1,29 @@
+redis 有哪慢的操作
+  底层数据：
+    5中数据类型
+      String、List、Hash、Zset、Set
+    6中数据结构
+      动态字符串、链表、压缩列表、Hash、跳表、数组
+  如何查找
+    通过全局的hash表找到Entry，entry保存有key 和value
+  为什变慢了
+    hash冲突，链表查询
+    rehash过程
+      给hash表2分配更大的空间
+      吧hash表1拷贝到hash表2
+      释放hash表1
+
+      存在的问题：reHash阻塞
+      解决方式：渐进式hash
+      原理：当请求来的时候落在hash表1，随便表周围的数据一起拷贝到hash表2
+    集合数据的操作效率
+      整形数组（压缩列表）和链表 他们的时间复杂度为O（1）
+      压缩列表：
+        zlbytes：所占长度
+        zltail：末尾指针
+        zllen：entry个数
+    不同的操作
+      单元素操作是基础
+      范围操作非常耗时
+        SCAN：放回固定长度
+      统计操作通常高效

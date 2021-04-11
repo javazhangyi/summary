@@ -1,0 +1,15 @@
+14-redis 保存时间序列
+  redisTimeSeries：底层数据结构，链表
+    TS.CREATE
+    TS.ADD
+    TS.GET
+    TS.MGET
+    TS>RANGE
+  特点（Hash 和 z-set 组合功能 ）
+    范围查询（z-set）查询一段时间范围的数据
+    单点查询（hash） 查询一个时间戳的数据
+    聚合查询（z-set）查询一段时间范围内的，聚合查询
+  缺点：范围查询是O(n)，ts.get 只能放回最新的数据
+  为什么不用Hash 和z-set
+    使用聚合查询需要传送到客户端操作，对网络要去比较严格
+    数据冗余
