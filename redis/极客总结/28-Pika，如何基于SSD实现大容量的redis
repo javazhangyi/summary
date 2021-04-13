@@ -1,0 +1,22 @@
+28-Pika，如何基于SSD实现大容量的redis
+  大内存的redis问题
+    生成RDB慢，以及恢复慢
+    同步慢，也可以造成缓冲区溢出
+  pika如何剞劂
+    rocksDB、binlog、nemo
+    组成
+      网络框架
+      pika线程模块
+      binlog
+      nemo储存模块
+      rocksDB
+    缺点：
+      降低数据的访问性能
+    优点：
+      可以保存更多实例数据
+      重启快
+      不用担心缓存区溢出
+
+    建议：
+      使用多线程
+      使用高配SSD

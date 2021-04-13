@@ -1,0 +1,20 @@
+24-缓存替换：数据淘汰策略
+  决定淘汰哪些数据
+    no-eviction
+    all-lru
+    all-random
+
+    volatile-lru
+    volatile-random
+    volatile-ttl
+
+    all-key-lfu
+    volatile-lfu
+  lru
+      redisObject lru属性保存时间戳，随机选出N个数据，把lru最小的数据删除掉，当下一次回收时候，挑选的数据，进入第一次淘汰的候选的数据集合，数据选择，必须是最小的
+  建议
+    优先使用all-key-lru，没有冷热数据之分，可以使用all-key-random
+    业务有置顶的需求，可以使用volatile-lru
+
+  如何处理淘汰的数据
+
