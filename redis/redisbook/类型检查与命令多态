@@ -1,0 +1,18 @@
+类型检查与命令多态
+
+  通用
+    del expire rename type object
+  针对一种类型
+    set get append strlen 字符串编码
+    hdel hset hget hlen hash编码
+    rpush lpop linsert llen 列表编
+    sadd spop sinsert scard 集合编
+    zadd zcard zrank zscore 有序集合
+
+    类型检查
+      通过 redisObject 中的 type（编码） 实现
+
+  多态命令实现
+    检查key是否是相应的数据类型
+
+

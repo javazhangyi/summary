@@ -1,0 +1,59 @@
+字典
+  dictht
+    dictEntry *table
+    long size
+    long sizeMask
+    long use
+
+  dictEntry
+    void *key
+
+    union{
+      val
+      uint64 u64
+      int64 s64
+    } v
+
+    dictEntry *next;
+
+  redis dict
+    dictType *type ：用于多态时候，储存操作函数
+    void *privdata ：多态时候，存储参数
+    dictht ht[2]:扩容
+    rehashidx：-1 不rehash
+
+  结构
+    dict
+      dictht
+        dictEntry
+
+
+  先计算hash，在通过hash值，得到索引值
+  解决键值冲突：链表发
+  rehash：
+    为ht[1]分配空间
+      扩张类型：ht[0].used * 2 的2^n
+      收缩类型：ht[0].used 的2^n
+    重新计算hash，放入ht[1]空间
+    迁移完后，将ht[1] 设置为ht[0]
+
+  hash扩容与收缩的条件
+    没有执行备份，但是负载因子大于1
+    执行备份，但是负载因子大于5
+    当负载因子小于0.1，执行收缩
+
+  负载因子 = use（数据个数）/hash 表的长度
+
+  为什么这么做：在备份时候，新增数据采用cow，如果rehash，原始的内存增大，新增的内存也会增大，造成内存浪费
+
+  渐进式rehash
+    分多次rehash，避免服务器长时间停顿
+
+  步骤
+    为ht[1]分配空间
+    将rehash设置为1
+    在add delete update，将数据更新的ht[1],操作完成rehash 自增
+    数据操作完成，将rehash 设置为-1
+
+  增删改查，都会在两边表操作
+

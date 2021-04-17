@@ -1,0 +1,21 @@
+对象的类型与编码
+  将数据存入redis 中，至少保存两个对象，一个是key 一个是 value
+
+  每一个对象都是有  redisObject 表示
+
+  redisObject
+    type
+      string
+      hash
+      list
+      set
+      zset
+    encoding
+      long
+      embstr
+      raw
+      linkedList
+      zipList
+      intset
+      skiplist
+    ptr：指针指向底层的数据结构

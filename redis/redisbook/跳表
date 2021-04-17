@@ -1,0 +1,13 @@
+跳表
+  zskiplistNode（跳表节点） 和 zskiplist（跳表节点相关信息） 两个数据结构定义
+  zskiplist
+    head
+    tail
+    level：指向层数最深的那个节点
+    length：包含跳表内的节点数量
+
+  zskiplistNode
+    level：数组
+    backward：只能后退一个节点
+    score：按照这个来排序
+    obj：保存对象成员 是一个SDS 数据结构

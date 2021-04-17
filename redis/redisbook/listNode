@@ -1,0 +1,27 @@
+listNode
+  listNode *prev
+  listNode *next
+  void *value
+  他是双向链表
+
+  配合list 结构体管理
+    list
+      listNode *head
+      listNode *tail
+
+      long len
+
+      dup（*ptr）：节点复制函数
+      free（*ptr）：节点释放函数
+      match（*ptr，*key）：节点对比行数
+
+
+    特点：
+      双端
+      无环
+      带有头结点，和未节点
+      带有链表长度计数器
+
+      多态：通过函数操作，设置不同的类型值
+
+

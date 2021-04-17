@@ -1,0 +1,11 @@
+有序集合
+  zipList，skipList
+
+  skiplist：编码
+    zset
+      zskiplist：跳表
+      dict：分值映射
+
+编码转化
+  个数少于128
+  成员长度小于64

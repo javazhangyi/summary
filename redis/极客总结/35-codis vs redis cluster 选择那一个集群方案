@@ -1,0 +1,6 @@
+35-codis vs redis cluster 选择那一个集群方案
+  codis组件
+    codis-server
+    codis-proxy
+    zookeeper
+    codis-dashbord 和 codis-fs
