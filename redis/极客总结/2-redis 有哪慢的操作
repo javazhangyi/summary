@@ -1,13 +1,48 @@
 redis 有哪慢的操作
   底层数据：
-    5中数据类型
-      String、List、Hash、Zset、Set
-    6中数据结构
+    5种数据类型
+      String
+        sds：
+            int：数字且小于44
+            embstr：字符小于44
+            raw：大于44
+      List：
+        压缩列表：
+            zlbytes
+            zltail
+            zllen
+                pre_len
+                encoding
+                length
+                content:字节数组
+            entry
+            zlend
+        链表：
+      Hash：
+        压缩列表
+        hash
+      Zset
+        跳表
+        压缩列表
+      Set
+        hash
+        数组
+      bitmap
+      heperloglog
+    6种数据结构
       动态字符串、链表、压缩列表、Hash、跳表、数组
-  如何查找
-    通过全局的hash表找到Entry，entry保存有key 和value
+
+ 参考：
+    https://www.cnblogs.com/hunternet/p/11268067.html
+
   为什变慢了
-    hash冲突，链表查询
+    hash冲突造成链表查询
+    集合查询
+        压缩链表
+        链表
+        数组
+
+    hash冲突造成链表查询
     rehash过程
       给hash表2分配更大的空间
       吧hash表1拷贝到hash表2
@@ -27,3 +62,7 @@ redis 有哪慢的操作
       范围操作非常耗时
         SCAN：放回固定长度
       统计操作通常高效
+
+问题：
+    整数数组和压缩列表在查找时间复杂度方面并没有很大的优势，那为什么 Redis 还会把它们作为底层数据结构呢？
+    数据结构紧凑，适合范围查询，大数据增大时候，会转化为其的数据结构

@@ -1,0 +1,33 @@
+33-mysql 调优SQL 语句
+  1、无效索引、索引失效
+  2、锁等待
+  3、不恰当的SQL语句
+    select*
+    limit m,n
+    对非索引字段排序
+
+  explain
+    id：执行计划id
+    select_type:simple,primary,union,subquery
+    table:
+    paetitions:
+    type:system>const>eq_ref>ref>rang>index>ALL
+    possible_key
+    key
+    key_len
+    ref
+    rows
+    filtered
+    extra
+
+  通过show profile来查看sql 执行性能
+
+  常用的sql优化
+    1、优化分页查询：limit+order by，如果没有分页，性能堪忧，如果有分页，后面性能也堪忧，通过子查询，先获取10000以后的id，然后通过条件id>查询的id即可
+    2、select count(*),myisam,他是将数据提前，放入，但是加上where，就和innodb没有区别
+      通过增加汇总统计，将数据提前缓存
+    3、select * 是否可以使用的带覆盖索引
+
+  通过慢日志获得执行较慢的sql
+
+select * from `demo`.`order` where id> (select id from `demo`.`order` order by order_no limit 10000, 1)  limit 20;

@@ -1,0 +1,52 @@
+设置时间过期
+  expier
+  pexpier
+  expierat
+  pexpierat  最后通过这个命令实现
+
+  ttl
+  pttl
+移除过期字典
+  persist
+过期字典
+  redisDB
+    dict<redisObject_key,redisObject_value>
+    expire<redisObject_key,longlong>
+    redisObject:使用使用同一个对象
+
+过期见的判断
+  判断是否再过期字典中，存在，则取得该键的过期时间
+  检查当前的unix的时间过是否在于过期时间，如果大，则过期，否则未过期
+
+过期键删除策略
+  定时：设置定时器，时间过期，触发
+  定期：周期性处理
+    每一个一段时间就删除
+    问题：频率和太频繁 和定时差不多，频率太久，和惰性差多
+  惰性：过期再删除
+
+  redis：采用定时删除 和惰性删除
+    定期策略实现：在规定时间内，遍历数据库，随机放回过期字典中的key，判断是否过过期
+
+生成RDB对过期数据的处理
+  使用save 或者 bgsave，创建RDB，如果数据过期，则不会保存到RDB 文件中
+
+载入RDB对过期数据处理
+  主服务器：忽略过期的key
+  从服务器：都会保存到RDB中，当同步时候，从数据库，会被清空
+
+  AOF 写入
+    当数据过期，没有影响
+    当数据被定期或者惰性删除，会追加del 命令
+
+  aof重写
+    过期，忽略数据
+
+  复制
+    主服务器，删除过期key后，会发送个从服务器
+    从服务器，及时数据过期，也会把它当做未过期数据处理
+    只有从服务器接收到主服务器del ，再去删除
+
+数据库通知
+  subscribe__keyspace@0__:message:监控key执行过哪些命令
+  subscribe__keyevent@0__del:监控命令被哪些键值执行

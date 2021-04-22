@@ -1,0 +1,7 @@
+12-多线程所优化
+  synchronized,可以用来修饰方式或者修饰同步代码快
+  通过字节码，在底层的实现是monitor-exit，monitor-enter
+  在进入同步同步代码块，该线程就持有该对象，退出后，自动释放
+  对于系统底层，是通过mutex lock 实现
+  多个线程竞争，会被放入contentionList，然后通过monitorexit 唤醒线程，进入entryList，获取mutex-lock，进执行，没有则继续进入contentionList
+  如果有线程调用wait，自动进入 waitSet，当调用notify，则waitSet 也会进入 entryList

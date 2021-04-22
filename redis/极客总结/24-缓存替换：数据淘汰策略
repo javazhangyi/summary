@@ -2,13 +2,13 @@
   决定淘汰哪些数据
     no-eviction
     all-lru
-    all-random
+    all-random：没有冷热数据之分
 
-    volatile-lru
+    volatile-lru：有置顶的需求，将顶部资源不设置过期时间
     volatile-random
     volatile-ttl
 
-    all-key-lfu
+    all-key-lru：优先使用
     volatile-lfu
   lru
       redisObject lru属性保存时间戳，随机选出N个数据，把lru最小的数据删除掉，当下一次回收时候，挑选的数据，进入第一次淘汰的候选的数据集合，数据选择，必须是最小的
@@ -18,3 +18,13 @@
 
   如何处理淘汰的数据
 
+
+保证缓存和后端数据库的一致性
+    只读模式
+    read/write througth, mysql 这种模式，有就直接使用，没有缓存自动加载到缓存中，自动刷新脏数据到磁盘中
+    Write Back：
+
+
+
+分布一致性
+https://www.cnblogs.com/jajian/p/10014145.html

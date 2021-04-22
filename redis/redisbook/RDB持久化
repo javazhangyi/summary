@@ -1,0 +1,8 @@
+RDB持久化
+  触发命令
+    save，会阻塞主线层
+    bgsave，开启一个子线程持久化
+      客户端发送的save、bgsave，bg-rewrite-aof都会拒绝，会产生竞争
+
+  rdb 触发条件
+  save 900 1 ：900s内至少有一次修改
