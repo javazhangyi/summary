@@ -1,0 +1,33 @@
+32-redis 主从同步与故障切换，有哪些坑
+  数据不一致：
+    网咯延迟
+    从库阻塞
+
+  读到过期数据：
+    内存删除策略导致：惰性删除 定期删除
+    redis版本导致：3.2 之前从库会放回过期数据，3.2之后，会返回空值
+    主库和从库时间导致
+
+  配置不合理，导致服务挂掉
+    protected-mode：是否可以被其他的机器的哨兵访问
+    cluster-node-timeout：redis cluster 相应实例的心跳超时间
+
+
+
+坑                           原因                                              解决方法
+主从数据不一致                 网络延迟，或者从库阻塞                              监控
+
+服务到过期数据                 过去数据珊删除策略，或者版本或者不一致
+
+配置不合理，服务挂掉            protected-mode、cluster-node-timeout 设置不合理     protected-mode 设置为no，调大cluster-node-timeout 参数
+
+
+建议
+    将从库设置为 slave-serve-stale-date 从库是否能够读写命令，no时候，只能获取配置文件
+    slave-read-only：yes，只能进行读操作
+
+
+我们把 slave-read-only 设置为 no，让从库也能直接删除数据，以此来避免读到过期数据，你觉得，这是一个好方法吗？
+    不是，操作复杂，权限开放留下弊端
+
+
