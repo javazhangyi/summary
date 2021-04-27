@@ -1,0 +1,157 @@
+猎头
+    https://docs.qq.com/doc/DVFhRSHFOaHBmVXFE
+
+1、三次握手的详细过程
+参考 https://blog.csdn.net/nyist_zxp/article/details/80885697
+    客户端                服务器
+                          listen
+                  syn
+    sync-send     -->     syn-rvcd
+
+                  ack
+    es            <--
+
+                  ack
+                  -->       es
+
+
+                  fin
+    fin_wait1     -->        close_wait
+
+                  ack
+    fin_wait2     <--
+
+                  fin
+    time_wait     <--        last_ack
+
+                  ack
+                  -->         close
+
+    close
+
+2、time_wait状态在什么情况下出现，大量出现怎么发现和处理
+    time_time  在主动关闭方出现
+    通过netstat 可以查询到time_wait  的数量
+    可以通过配置系统的参数，加快回收
+
+    如果出现close_wait,连接并没有完全关闭，问题出现在代码里面，需要查代码
+
+3、arp icmp dns
+    arp：通过ip 获取mac，来进行通信
+    icmp：网络控制协议，用于报告网络程差错
+    dns：通过域名获取真实的ip地址
+
+
+4、mysql 中的explain 有哪些字段
+    table：操作的table
+    type：显示连接使用了那种那类型
+        const: 将主键放入where 查询
+        eq_reg:通过主键和唯一索引，需要外部join
+        ref：普通索引，等值查询，需要小范围的扫描
+        range：范围索引：between and > < in or 也是范围扫描
+        index：索引，需要回表，在排序的情况和性能才比all高，或者使用覆盖索引
+        all：
+    prossible-keys：可能选择的索引
+
+    key:最后选择的索引
+    key_len：索引长度
+
+    rows：
+    参考：
+    https://blog.csdn.net/anthony4515/article/details/107767965
+
+5、100亿数据找出最大的1000个数字（top K问题）
+    1、局部淘汰（申请一个1000容器，遍历数据往里面放）
+    2、分而治之，将数据拆分为1000份小文件，对每一个小文件，获取1000个数据，然后合并
+
+6、如何实现一个线程安全的hashMap
+    1、Collections.synchronizedMap
+    2、ConcurrentHashMap
+
+7、图中如何实现最短路径
+    1、Dijkstra算法
+    2、Floyd-Warshall算法
+    参考：https://blog.csdn.net/weixin_42678507/article/details/83416595
+
+8、操作系统的inode 干嘛的，存储文件基本信息
+    创建者
+    创建时间
+    groupid
+    读写权限
+
+9、redis 数据持久化的方式有哪些，各有什么优缺点
+    rdb，aof，混合
+    恢复速度、文件大小、对redis影响、数据丢失风险
+
+10、mysql 有哪些引擎，各自有什么特点，mysql 有哪几种隔离级别
+    innodb：my-is-am、is-am、cvs、黑洞、内存
+    innodb，my-is-am： 支持行锁、支持外键、索引方式、支持事务
+    串行化、可重复读、读提交、读未提交
+
+11、mysql 索引原理，以及索引覆盖、mysql 联合索引 以及最左匹配
+    有哪些索引：聚簇、非聚簇、hash
+    参考：https://www.cnblogs.com/Eva-J/articles/10126413.html
+    为什么要有索引：加快查询的速度、约束数据
+    什么是索引：索引是按照一定顺序组织数据按照相应的规则，达到快速访问的结果
+
+12、系统如何查看系统负载
+    top
+    vmstat
+    iftop
+    参考：https://blog.csdn.net/qq_36357820/article/details/76606113
+
+13、linux 有一个web 服务，cpu 持续很好，分析一个原因，以及解决办法
+    1、通过jps 获取他的进程号，在通过jstack 获取他的一个线程快照
+
+
+14、Java泛型的实现原理，为什么设计泛型
+    在编译的时候，进行类型擦除，在使用到时候，在进行类型的强制转换
+    代码复用
+
+15、进程和线程的区别
+    进程是系统资源分配的最小单位
+    线程是系统调度的最小的单位
+
+    同一个进程下的线程共享线程的资源，进程与进程之间的，资源是隔离的
+
+
+16、tcp/ip,ip协议是不可靠传输，是怎么保证可靠传输
+    0、校验和
+    1、确认应答
+    2、超时重传
+    3、序列号
+    4、连接管理
+    5、流量控制
+    6、拥塞控制
+    参考：https://blog.csdn.net/z69183787/article/details/108165847
+
+17、Object 有哪些方法
+    1、wait
+    2、notify
+    3、notifyAll
+    4、equal
+    5、toString
+    6、hashCode
+    7、finalize
+    8、clone
+
+18、hashCode 有什么用，用在哪里
+    hashCode 他原理是，将一个范围的数据，映射为一个小范围的数据，以此加快数据查询的和速度
+    比如何hashMap，先通过key 获取一个桶值，在通过链表解决hash冲突
+    哪些操作会使用到hashcode
+
+
+20、网络分层，每一层做什么，链路层如何决定发送给谁，路由器工作再哪一层
+    应用：http、ftp
+    表示：数据格式化
+    回话：建立连接
+    传输层：tcp，udp
+    网络层：ip，bgp--------------》路由器
+    数据链路：校验差错，arp   ----------------》网桥
+    物理层：物理信号发送------------------》集线器，中继器
+    参考：https://blog.csdn.net/u011774517/article/details/67631439
+
+21、地图搜索两点的路径如何实现
+    dijkstra 算法，Floyd算法
+
+22、抢红包系统如何实现，考虑那些点
