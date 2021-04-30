@@ -1,0 +1,53 @@
+https://thinkwon.blog.csdn.net/article/details/104390689
+java异常
+  1、java异常简介
+    java异常是java语言除以异常的一种机制，保证的程序的健壮性，在异常发生，异常可以有效回答waht、where、why，什么类型抛出异常，在哪里抛出异常，为什么抛出异常
+  2、异常架构
+    THrown ：包含线程是的线程快照，通过printstackTrace（）打印堆栈信息
+           Error：系统抛出
+              VirtulMachineError
+                  NoClassDefDountError：类没有定义，
+                  OutOfMemoryError
+                  StatckOverFlowError
+           exception：用户代码抛出的
+              运行时异常：不需要捕获，一般是由程序逻辑造成的，当发生时候，有jvm抛出和捕获
+                  数组越界异常
+                  空指针
+                  ClassNotFoundException:Class.forName()
+              非运行时异常：需要用户捕获
+                  IOException
+                  网络异常
+
+java异常关键字
+  try：用于监听，可能发生的代码逻辑，放在这一块
+  catch：用于捕获异常
+  finally：代码最后执行的逻辑，一般用于资源的释放，也有例外，大try 或者catch 调用System.exit(-1);将不会执行此区域的代码
+  这一块代码，不要使用return，可能直接覆盖try 和catch 里面的数据，一般是执行完finally里的代码，然后再去执行try 或者catch 里面的return 或者 throw 代码
+
+
+
+jvm 如何处理异常
+1、当系统发生异常时候，jvm 生成一个异常对象，里面记录了该线层的栈信息，异常名称等信息，然后判断是否有异常表处理该异常，有，就跳转到这一块
+没有就提交给jvm，jvm调用默认的处理方法处理此异常
+
+
+throw 和 throws 去呗
+
+1、throw 用于方法内部，用于抛出异常
+2）throws 用于方法头部，标识改方法可能抛出的异常，调用者调用这方法，必须处理，或者也在方法区生命一个throws
+
+
+final、finally、finalize 有什么区别？
+  1、final 用于修饰类，便是该类不可继承，用于修饰方法，表示该方法不可复写，用于修饰变量，便是改变量的应用不可更改
+  2、finally 用于try catch 异常补货中，用于最后执行的代码，一般用于资源的释放，在try 和catch return 执行，所以不再finally 执行return  会被覆盖
+  如果在try catceh 调用System,exit(-1),则不会执行fianlly 里面代码
+  3、finalize 是Object 的方法，在对象被回收时候，会执行该方法，异常用于资源回收，方式可以用clean机制取代
+
+
+NoClassDefFoundError 和 ClassNotFoundException 区别？
+
+  NoClassDefFoundError 这还少jvm 抛出的error，class文件编译过来，但是运行的时候，失败，可能的是maven scope 设置为complie牡丹石呢能编译通过，但是运行失败隐式加载一个资源造成的
+  ClassNotFoundException 这是在程序运行时候，资源找不到，比如说通过Class.forName 告诉ClassLoader显示的加载一个造成的
+
+
+
