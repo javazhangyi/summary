@@ -6,3 +6,9 @@
 今天可能会失败的概率有99
 今天我也愿意去尝试
 看你哭，看你笑，
+
+
+ssh webadmin@58.220.29.171 "/home/builder/evn/cloud_builder_server.sh stop"
+ssh webadmin@58.220.29.171 "sleep 2; rm -rf /home/builder/evn/newBuilder.jar"
+scp ${WORKSPACE}/target/newBuilder*.jar webadmin@58.220.29.171:"/home/builder/evn/newBuilder.jar"
+ssh webadmin@58.220.29.171 "/home/builder/evn/cloud_builder_server.sh start"
