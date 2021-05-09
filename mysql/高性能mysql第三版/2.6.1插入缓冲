@@ -1,0 +1,13 @@
+insert buffer
+    对于非聚集索引的插入或者更新操作，这一块是离散的操作，可以通过insert-buffer 提高性能
+    然后再一定频率合并非聚集索引，此时，主键的索引已经是插入的，因为他是顺序
+
+insert-buffer 条件
+    索引是辅助索引
+    索引不是唯一索引
+
+insert-buffer 问题
+    如果使用insert-buffer，马上又去查找，性能适得其反
+
+change-buffer
+    他是对insert-buffer 升级， insert- buffer，delete-buffer，purge-buffer
