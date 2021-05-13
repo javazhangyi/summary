@@ -1,0 +1,6 @@
+doublewrite
+    double write buffer 2M
+    物理磁盘共享空间 2M
+    过程：先把脏数据刷到double write buffer，然后分两次，每次1M写入物理磁盘
+
+提高可靠性

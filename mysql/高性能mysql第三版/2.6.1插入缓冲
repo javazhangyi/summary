@@ -11,3 +11,34 @@ insert-buffer 问题
 
 change-buffer
     他是对insert-buffer 升级， insert- buffer，delete-buffer，purge-buffer
+
+insert-buffer 实现
+    他是一颗B+ 树，他存放在默认的的共享空间
+    search key 占用9字节
+        space:占用的表空间 4字节
+        marker：1字节
+        offset：所在页的偏移量 4字节
+    metadata
+        IBUF_REC_OFFSET_COUNT 2
+        IBUF_REC_OFFSET_TYPE  1
+        IBUF_REC_OFFSET_FLAGS 1
+    当需要出入一个辅助索引到叶中，如果不在缓冲池中，则先构建一个search-key，接下来插入insert-buffer
+
+insert buffer bitmap: 用来保证每次merge insert buffer
+    IBUF_BITMAP_FREE 2 表示该辅助索引中的可用空间的数量
+        0 无可用空间
+        1 表示剩余空间大于1/32
+        2 表示剩余空间大于1/16
+        3 表示剩余空间大于1/8
+
+    IBUF_BITMAP_BUFFERED 1 1表示该辅助索引页有记录在insert buffer 中
+    IBUF_BITMAP_IBUF 1 1表示该页为insert buffer树的索引页
+
+
+Merge insert buffer
+    合并时机
+        辅助索引被读取到缓存去
+        insert buffer bitmap 追踪的索引页，已没有可用空间
+        master thread 刷页
+
+性能提升
